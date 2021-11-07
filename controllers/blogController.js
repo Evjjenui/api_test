@@ -1,11 +1,10 @@
 const { findAll, findByID, create, update, deleteItem } = require('../models/itemsModel');
 const { getPostData } = require('../utils');
 
-// Get product
+// Get blogItem
 async function getBlogs(req, res) {
-  const url = req.url.split('/')[1]
   try {
-    const data = await findAll(url)
+    const data = await findAll('blogs')
 
     res.writeHead(200, {'Content-Type': 'application/json'} )
     res.end(JSON.stringify(data))
@@ -14,27 +13,23 @@ async function getBlogs(req, res) {
   }
 }
 
-// Get product by ID
+// Get blogItem by ID
 async function getBlogById(req, res) {
-  const url = req.url.split('/')[1]
   try {
-    const product = await findByID(req.params.id, url)
+    const blogItem = await findByID(req.params.id, 'blogs')
     
-    if (!product) {
-      res.writeHead(404, {'Content-Type': 'application/json'} )
-      res.end(JSON.stringify({message : `Blog Not Found ${req.params.id}`}))
+    if (!blogItem) {
+      res.status(404).json({message : `Blog Not Found ${req.params.id}`})
     } else {
-      res.writeHead(200, {'Content-Type': 'application/json'} )
-      res.end(JSON.stringify(product))
+      res.status(200).json(blogItem)
     }
   } catch (error) {
     console.log(error)
   }
 }
 
-// POST new product
+// POST new blogItem
 async function createBlog(req, res) {
-  const url = req.url.split('/')[1]
 
   try {
     const data = await getPostData(req)
@@ -42,32 +37,29 @@ async function createBlog(req, res) {
     console.log('BLOGS post');
     const { title, details, author } = JSON.parse(data)
     
-    const product = {
+    const blogItem = {
       title,
       details,
       author,
     }
 
-    const newBlog = await create(product, url)
+    const newBlog = await create(blogItem, 'blogs')
 
-    res.writeHead(201, {'Content-Type': 'application/json'} )
-    res.end(JSON.stringify(newBlog))
+    res.status(201).json(newBlog)
     
   } catch (error) {
     console.log(error);
   }
 }
 
-// Update product by ID
+// Update blogItem by ID
 async function updateBlog(req, res) {
-  const url = req.url.split('/')[1]
 
   try {
-    const blog = await findByID(req.params.id, url)
+    const blog = await findByID(req.params.id, 'blogs')
     
     if (!blog) {
-      res.writeHead(404, {'Content-Type': 'application/json'} )
-      res.end(JSON.stringify({message : `Blog Not Found ${req.params.id}`}))
+      res.status(404).json({message : `Blog Not Found ${req.params.id}`})
     } else {
       const data = await getPostData(req)
   
@@ -79,31 +71,27 @@ async function updateBlog(req, res) {
         author: author || blog.author,
       }
       
-      const updatedBlog = await update(req.params.id, blogData, url)
+      const updatedBlog = await update(req.params.id, blogData, 'blogs')
 
-      res.writeHead(200, {'Content-Type': 'application/json'} )
-      res.end(JSON.stringify(updatedBlog))
+      res.status(200).json(updatedBlog)
     }
   } catch (error) {
     console.log(error);
   }
 }
 
-// DELTE product by ID
+// DELTE blogItem by ID
 async function deleteBlog(req, res) {
-  const url = req.url.split('/')[1]
 
   try {
-    const product = await findByID(req.params.id, url)
+    const blogItem = await findByID(req.params.id, 'blogs')
     
-    if (!product) {
-      res.writeHead(404, {'Content-Type': 'application/json'} )
-      res.end(JSON.stringify({message : `Blog Not Found ${req.params.id}`}))
+    if (!blogItem) {
+      res.status(404).json({message : `Blog Not Found ${req.params.id}`})
     } else {
-      await deleteItem(req.params.id, url)
+      await deleteItem(req.params.id, 'blogs')
 
-      res.writeHead(204, {'Content-Type': 'application/json'} )
-      res.end(JSON.stringify({message: `Blog ${req.params.id} DELETED`}))
+      res.status(204).json({message: `Blog ${req.params.id} DELETED`})
     }
   } catch (error) {
     console.log(error);

@@ -1,50 +1,50 @@
 let data = require('../data/data')
 const { writeToFile } = require('../utils')
 
-function findAll(url) {
+function findAll(key) {
   return new Promise( ( resolve, reject ) => {
-    if (url) {
-      resolve(data[url])
+    if (key) {
+      resolve(data[key])
     } else {
       resolve(data)
     }
   })
 }
 
-function findByID(id, url) {
+function findByID(id, key) {
   
   return new Promise( ( resolve, reject ) => {
-    const productsList = data[url]
+    const productsList = data[key]
     const productById = productsList.find(item => item.id == id)
     resolve(productById)
   })
 }
 
-function create(item, url) {
+function create(item, key) {
 
   return new Promise( ( resolve, reject ) => {
     const newProduct  = {id: Date.now().toString(), ...item}
-    data[url].push(newProduct)
+    data[key].push(newProduct)
     writeToFile('./data/data.json', data)
     resolve(newProduct)
   })
 }
 
-function update(id, item, url) {
+function update(id, item, key) {
 
   return new Promise( ( resolve, reject ) => {
-    const index = data[url].findIndex((e) => e.id === id)
-    data[url][index] = {id, ...item}
+    const index = data[key].findIndex((e) => e.id === id)
+    data[key][index] = {id, ...item}
     console.log(data);
     writeToFile('./data/data.json', data)
-    resolve(data[url][index])
+    resolve(data[key][index])
   })
 }
 
-function deleteItem(id, url) {
+function deleteItem(id, key) {
 
   return new Promise( ( resolve, reject ) => {
-    data[url] = data[url].filter((e) => e.id !== id)
+    data[key] = data[key].filter((e) => e.id !== id)
     writeToFile('./data/data.json', data)
     resolve()
   })

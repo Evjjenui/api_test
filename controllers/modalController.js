@@ -1,44 +1,41 @@
 const { findAll, findByID, create, update, deleteItem } = require('../models/itemsModel');
 const { getPostData } = require('../utils');
 
-// Get product
+// Get modalItem
 async function getModals(req, res) {
-  const url = req.url.split('/')[1]
+  
   try {
-    const data = await findAll(url)
+    const data = await findAll('modal_items')
 
-    res.writeHead(200, {'Content-Type': 'application/json'} )
-    res.end(JSON.stringify(data))
+    res.status(200).json(data)
   } catch (error) {
     console.log(error);
   }
 }
 
-// Get product by ID
+// Get modalItem by ID
 async function getModalById(req, res) {
-  const url = req.url.split('/')[1]
+  
   try {
-    const product = await findByID(req.params.id, url)
+    const modalItem = await findByID(req.params.id, 'modal_items')
     
-    if (!product) {
-      res.writeHead(404, {'Content-Type': 'application/json'} )
-      res.end(JSON.stringify({message : `Modal Not Found ${req.params.id}`}))
+    if (!modalItem) {
+      res.status(404).json({message : `Modal Not Found ${req.params.id}`})
     } else {
-      res.writeHead(200, {'Content-Type': 'application/json'} )
-      res.end(JSON.stringify(product))
+      res.status(200).json(modalItem)
     }
   } catch (error) {
     console.log(error)
   }
 }
 
-// POST new product
+// POST new modalItem
 async function createModal(req, res) {
-  const url = req.url.split('/')[1]
+  
 
   try {
     const data = await getPostData(req)
-    console.log(url)
+    console.log('modal_items')
     const modal = {
       modalName,
       addInfo,
@@ -46,26 +43,24 @@ async function createModal(req, res) {
       date
     }
 
-    const newModal = await create(modal, url)
+    const newModal = await create(modal, 'modal_items')
 
-    res.writeHead(201, {'Content-Type': 'application/json'} )
-    res.end(JSON.stringify(newModal))
+    res.status(201).json(newModal)
     
   } catch (error) {
     console.log(error);
   }
 }
 
-// Update product by ID
+// Update modalItem by ID
 async function updateModal(req, res) {
-  const url = req.url.split('/')[1]
+  
 
   try {
-    const modal = await findByID(req.params.id, url)
+    const modal = await findByID(req.params.id, 'modal_items')
     
     if (!modal) {
-      res.writeHead(404, {'Content-Type': 'application/json'} )
-      res.end(JSON.stringify({message : `Modal Not Found ${req.params.id}`}))
+      res.status(404).json({message : `Modal Not Found ${req.params.id}`})
     } else {
       const data = await getPostData(req)
   
@@ -77,31 +72,29 @@ async function updateModal(req, res) {
         price: price || modal.price,
       }
       
-      const updatedModal = await update(req.params.id, modalData, url)
+      const updatedModal = await update(req.params.id, modalData, 'modal_items')
 
-      res.writeHead(200, {'Content-Type': 'application/json'} )
-      res.end(JSON.stringify(updatedModal))
+      res.status(200).json(updatedModal)
     }
   } catch (error) {
     console.log(error);
   }
 }
 
-// DELTE product by ID
+// DELTE modalItem by ID
 async function deleteModal(req, res) {
-  const url = req.url.split('/')[1]
+  
 
   try {
-    const product = await findByID(req.params.id, url)
+    const modalItem = await findByID(req.params.id, 'modal_items')
     
-    if (!product) {
-      res.writeHead(404, {'Content-Type': 'application/json'} )
-      res.end(JSON.stringify({message : `Modal Not Found ${req.params.id}`}))
+    if (!modalItem) {
+      res.status(404).json({message : `Modal Not Found ${req.params.id}`})
     } else {
-      await deleteItem(req.params.id, url)
+      
+      await deleteItem(req.params.id, 'modal_items')
 
-      res.writeHead(204, {'Content-Type': 'application/json'} )
-      res.end(JSON.stringify({message: `Modal ${req.params.id} DELETED`}))
+      res.status(204).json({message: `Modal ${req.params.id} DELETED`})
     }
   } catch (error) {
     console.log(error);
