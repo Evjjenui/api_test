@@ -36,11 +36,12 @@ async function createModal(req, res) {
   try {
     const data = await getPostData(req)
     console.log('modal_items')
+    const { name, addInfo, price } = JSON.parse(data)
+    
     const modal = {
-      modalName,
+      name,
       addInfo,
-      price,
-      date
+      price
     }
 
     const newModal = await create(modal, 'modal_items')
@@ -55,6 +56,7 @@ async function createModal(req, res) {
 // Update modalItem by ID
 async function updateModal(req, res) {
   
+  console.log('UPD Modal Item')
 
   try {
     const modal = await findByID(req.params.id, 'modal_items')
@@ -64,10 +66,10 @@ async function updateModal(req, res) {
     } else {
       const data = await getPostData(req)
   
-      const { modalName, addInfo, price } = JSON.parse(data)
+      const { name, addInfo, price } = JSON.parse(data)
 
       const modalData = {
-        modalName: modalName || modal.modalName,
+        name: name || modal.name,
         addInfo: addInfo || modal.addInfo,
         price: price || modal.price,
       }

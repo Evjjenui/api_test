@@ -21,9 +21,9 @@ app.route('/blogs/:id')
     getBlogById(req, res)
   })
   // TODO BLLOG UPDATE on FRONT
-  // .put((req, res) => {
-  //   getBlogById(req, res)
-  // })
+  .put((req, res) => {
+    getBlogById(req, res)
+  })
   .delete((req, res) => {
     deleteBlog(req, res)
   })
@@ -43,7 +43,6 @@ app.route('/modal_items/:id')
   .get((req, res) => {
     getModalById(req, res)
   })
-  // TODO BLLOG UPDATE on FRONT
   .put((req, res) => {
     updateModal(req, res)
   })
